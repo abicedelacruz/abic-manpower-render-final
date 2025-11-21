@@ -1,17 +1,52 @@
-
-{% extends "base.html" %}
+{% extends "layout.html" %}
 {% block content %}
-<h2>Time Entries</h2>
-<form method="post">
-  <select name="employee_id">{% for e in employees %}<option value="{{e.id}}">{{e.name}} ({{e.client.name}})</option>{% endfor %}</select>
-  <input type="date" name="date" required>
-  <label>Time In <input type="time" name="time_in"></label>
-  <label>Time Out <input type="time" name="time_out"></label>
-  <button type="submit">Save</button>
-</form>
-<table><tr><th>Date</th><th>Employee</th><th>In</th><th>Out</th></tr>
-{% for t in entries %}
-  <tr><td>{{t.date}}</td><td>{{t.employee.name}}</td><td>{{t.time_in}}</td><td>{{t.time_out}}</td></tr>
-{% endfor %}</table>
-<a href="{{ url_for('admin_dashboard') }}">Back</a>
+
+<div class="card" style="max-width: 800px; margin:auto;">
+    <h2>Time Entries</h2>
+
+    <form method="POST">
+        <!-- EMPLOYEE DROPDOWN (FIXED) -->
+        <select name="employee_id" required>
+            <option value="">Select Employee</option>
+            {% for e in employees %}
+                <option value="{{ e.id }}">{{ e.name }} ({{ e.client.name }})</option>
+            {% endfor %}
+        </select>
+
+        <!-- DATE PICKER -->
+        <input type="date" name="date" required>
+
+        <!-- TIME INPUTS -->
+        <label>Time In</label>
+        <input type="time" name="time_in" required>
+
+        <label>Time Out</label>
+        <input type="time" name="time_out" required>
+
+        <button type="submit">Save</button>
+    </form>
+
+    <br>
+
+    <table class="table">
+        <tr>
+            <th>Date</th>
+            <th>Employee</th>
+            <th>In</th>
+            <th>Out</th>
+        </tr>
+
+        {% for e in entries %}
+        <tr>
+            <td>{{ e.date }}</td>
+            <td>{{ e.employee.name }}</td>
+            <td>{{ e.time_in }}</td>
+            <td>{{ e.time_out }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <a href="/admin">Back</a>
+</div>
+
 {% endblock %}
