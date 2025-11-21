@@ -329,28 +329,28 @@ def employee_dashboard():
 def download_zip():
     return send_from_directory('/mnt/data', 'abic_payroll_app.zip', as_attachment=True)
 
-if __name__ == '__main__':
-    with app.app_context():
+# ---------------------------
+# RENDER — Automatic DB setup
+# ---------------------------
 
-        db.create_all()
+with app.app_context():
+    db.create_all()
 
-        # seed default clients as requested by user
-        names = [
-            'Mali Lending Corp.',
-            'JIANGSU SHUANGHUI ELECTRIC POWER DEVELOPMENT LIMITED.',
-            'Avanzado',
-            'CYTS',
-            'Jinyi',
-            'Minimax',
-            'Santilana',
-            'ShareWifi'
-        ]
+    default_clients = [
+        'Mali Lending Corp.',
+        'JIANGSU SHUANGHUI ELECTRIC POWER DEVELOPMENT LIMITED.',
+        'Avanzado',
+        'CYTS',
+        'Jinyi',
+        'Minimax',
+        'Santilana',
+        'ShareWiFi'
+    ]
 
-        for n in names:
-            if not Client.query.filter_by(name=n).first():
-                db.session.add(Client(name=n))
+    for c in default_clients:
+        if not Client.query.filter_by(name=c).first():
+            db.session.add(Client(name=c))
 
-        db.session.commit()
+    db.session.commit()
 
-    app.run(host='0.0.0.0', port=5000, debug=True)
 
